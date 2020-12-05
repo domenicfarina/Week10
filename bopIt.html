@@ -1,0 +1,112 @@
+<html>
+    <head>
+        <title>Bop It!</title>
+        <style>
+            
+            .wrapper{
+                width: 700px;
+                clear:both;
+
+            }
+            .command{
+                width:200px;
+                height:200;
+                border-radius: 100px;
+                float:left;
+                text-align: center;
+                line-height: 200px;
+            }
+            .t{
+                background-color: yellow;
+            }
+            .p{
+                background-color: blue;
+               
+            }
+            .b{
+                background-color: red;
+            }
+        </style>
+    </head>
+    <body>
+        <p id='special'> Bop It! </p>
+        <p id='points'></p>
+
+        <div id="wrapper">
+        <div class="t command">Twist it!</div>
+        <div class="p command">Pull it!</div>
+        <div class="b command">Bop it!</div>
+        </div>
+
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+        <script>
+            var timeRemaining = $("#currentTimeRemaining");
+            var secondsRemaining = 10;
+            var intervalId;
+            var currentCommand;
+            function randomCom(){
+                $(".command").css("border","none");
+                var commands= ['t','p','b'];
+                var command = commands[Math.floor(Math.random()*3)];
+            $( `.${command}`).css("border","5px solid black");
+            currentCommand= command;  
+            intervalId = setInterval(function(){
+					
+					changeTimer();
+				}, 1000);
+            }
+            function changeTimer() {
+				// 1. remove 1 from secondsRemaining
+				secondsRemaining = secondsRemaining - 1;
+				
+				// 2. update UI (user interface)
+				// TODO refactor this UI update into a function that can be used elsewhere
+				$(timeRemaining).text(secondsRemaining);
+
+				// 3. call the checkGameCondition function
+				checkGameCondition();
+			}
+            function checkGameCondition() {
+				// if the timer is done, the game is over
+				if(secondsRemaining <= 0) {
+					clearInterval(intervalId);
+					$("body").off();
+					
+                    alert("You ran out of time");
+				}
+			}
+            var currentPoints = 0;
+            
+            var points = $("#points");
+                
+              
+                $("body").keypress(determinePoints);
+            
+           
+
+            function determinePoints(event){
+                //need to figure out if we click a red or blue circle
+                console.log("CLICKED A CIRCLE", event.key);
+            
+                if(event.key==currentCommand) {
+                //you get 5 points
+                updatePoints(5);
+                randomCom();
+           }    else{
+               alert("that was not right");
+           }
+        }
+
+  
+            function updatePoints(newPoints){
+                console.log("About to get new points!", newPoints);
+                currentPoints += newPoints;
+
+                $(points).text(currentPoints);
+            }
+
+            randomCom();
+            
+        </script>
+    </body>
+</html>
